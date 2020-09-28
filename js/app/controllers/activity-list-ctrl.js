@@ -28,10 +28,15 @@ define(['services/activity-service','services/img-service', 'views/activity-list
         });
     }
 
-    function formHandler(activityType){
+    function formHandler(activityType, participants, price){
         //service info and the callback function to be called when done
-        actService.findActivity( activityType, function(data) {
-            listActView.renderActivity(data);
+        
+        actService.findActivity(activityType, participants, price, function(activityType,data) {
+            imgService.getImage(activityType, data, function(data, image){
+                listActView.renderActivity(data, image);
+            });
+        }, function(activityType, participants, price){
+            listActView.renderError(activityType, participants, price);
         });
     }
 

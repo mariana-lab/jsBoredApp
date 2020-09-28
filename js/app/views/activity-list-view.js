@@ -6,7 +6,7 @@ define(function () {
     internals.handlers = {};
 
     internals.events = {
-        changeForms: bindFormSubmitHandler,
+        changeForms: bindFormChangeHandler,
         magicButtonPush: bindButtonPushHandler,
         loadList: loadListHandler
     };
@@ -22,14 +22,13 @@ define(function () {
         //internals.elements.app.append(renderCards());
     };
 
-    function renderButton() {
-        return '<button id="little-button">button</button>';
-    }
+    
 
     function renderForm() {
         form =
-            '<form id="ajax-form" method="post">' +
-            '<select id = "myList">' +
+            '<form id="ajax-form" >' +
+            '<select id = "activities-sel">' +
+            '<option value = "">ACTIVITY</option>' +
             '<option value = "diy">DIY</option>' +
             '<option value = "social">Social</option>' +
             '<option value = "charity">Charity</option>' +
@@ -39,17 +38,51 @@ define(function () {
             '<option value = "music">Music</option>' +
             '<option value = "busywork">Busy</option>' +
             '<option value = "recreational">Recreational</option>' +
-            '<option value = "">Any</option>' +
             '</select>' +
-            '<input type="submit" value="Submit"></input>' +
+            
+            '<select id = "participants-sel">' +
+            '<option value = "">PARTICIPANTS</option>' +
+            '<option value = "1">1</option>' +
+            '<option value = "2">2</option>' +
+            '<option value = "3">3</option>' +
+            '<option value = "4">4</option>' +
+            '<option value = "5">5</option>' +
+            '<option value = "6">6</option>' +
+            '<option value = "7">7</option>' +
+            '<option value = "8">8</option>' +
+            '</select>' +
+
+            '<select id = "price-sel">' +
+            '<option value = "">PRICE</option>' +
+            '<option value = "0">free</option>' +
+            '<option value = "0.1">Very-low</option>' +
+            '<option value = "0.2">Low</option>' +
+            '<option value = "0.3">Medium-low</option>' +
+            '<option value = "0.4">Medium</option>' +
+            '<option value = "0.5">High</option>' +
+            '<option value = "0.6">Very High</option>' +
+            '</select>' +
+
+
             '</form>';
 
         return form;
+    }
 
+    function renderButton() {
+        return '<button id="magic-button">button</button>';
+    }
+
+    function renderCards(data) {
+        return '<div class="card"><p>' + data + '</p><di';
     }
 
     externals.renderText = function (data) {
         internals.elements.app.append('<p>' + data + '</p>');
+    }
+
+    externals.renderError = function (activityType, participants, price) {
+        internals.elements.error.append();
     }
 
     externals.renderActivity = function (activity, src) {
@@ -63,9 +96,7 @@ define(function () {
         internals.elements.app.append('<p>' + data + '</p>');
     }
 
-    function renderCards(data) {
-        return '<div class="card"><p>' + data + '</p><di';
-    }
+    
 
     function setIntervalX(callback, delay, repetitions) {
         var x = 0;
@@ -80,29 +111,21 @@ define(function () {
     }
 
     function bindButtonPushHandler(handler) {
-        $('#little-button').click(function (event) {
+        $('#magic-button').click(function (event) {
             handler()
         });
     };
 
-    function bindFormSubmitHandler(handler) {
-        $('#ajax-form').on('change', function() {
-            var selectedVal = $('#myList').find(':selected').val();
-            console.log(selectedVal);
+    function bindFormChangeHandler(handler) {
+        $('#ajax-form').on('change', function(event) {
+            event.preventDefault();
+            var activitiesVal = $('#activities-sel').find(':selected').val();
+            var participantsVal = $('#participants-sel').find(':selected').val();
+            var priceVal = $('#price-sel').find(':selected').val();
+            console.log(activitiesVal,participantsVal,priceVal);
+            handler(activitiesVal,participantsVal,priceVal);
             
         }); 
-        $('#ajax-form').submit(function (event) {
-            event.preventDefault();
-            var activityType = $('#myList').children("option:selected").val();
-
-            /*var $inputs = $('#ajax-form :option');
-            var values = {};
-            $inputs.each(function() {
-                values[this.name] = $(this).val();
-            });
-            console.log(values);*/
-            handler(activityType);
-        });
     };
 
 

@@ -53,11 +53,8 @@ define(function(){
         internals.currentHash = window.location.hash;
         require(['controllers/' + controllerName], function(controller){
             try {
-
                 controller.start();
-
             } catch (err) {
-
                 console.log(err.stack);
                 loadDefaultRouter();
             }

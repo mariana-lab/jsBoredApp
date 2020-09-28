@@ -8,16 +8,18 @@ define( function() {
     
 
     //populates the activityPicture object with activity url array attributes
-    function findPictures(activityType){
+    externals.getImage = function (activityType, data, cb){
+        activities = ['social','charity','education','recreational','cooking','relaxation','music','busywork','diy'];
+        activityType = activityType || activities[Math.floor(Math.random() * activities.length)];
+        console.log(data);
+        
         $.ajax({
             url: 'https://api.unsplash.com/search/photos/?query=' + activityType,
             success: function(response){
-                response.results.forEach(element => {
-                    externals.activityPictures[activityType].push(element.urls.small);
+            
+                image = response.results[(Math.floor(Math.random() * 10))].urls.small;
+                cb(data,image);
                     
-                    console.log(element);
-                    
-                });
             },
             beforeSend: authenticate,
             type: 'GET',
